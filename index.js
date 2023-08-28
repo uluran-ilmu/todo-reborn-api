@@ -10,6 +10,7 @@ app.use(
   cors({
     origin: ENV.ALLOWED_ORIGIN,
     optionsSuccessStatus: 200,
+    credentials: true,
   })
 );
 
@@ -17,4 +18,4 @@ app.listen(ENV.PORT, () => {
   console.log(`Server is running on PORT ${ENV.PORT}`);
 });
 
-app.use("/auth", authRouter);
+app.use("/api/auth", authRouter);
