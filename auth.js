@@ -34,7 +34,7 @@ const authorizeMiddleware = async (req, res, next) => {
 const getAuthUserHandler = async (req, res) => {
   const { user } = req.body;
   res.status(200).json({
-    user,
+    data: user,
   });
 };
 
@@ -126,10 +126,27 @@ const loginHandler = async (req, res) => {
   }
 };
 
+const logoutHandler = (req, res) => {
+  const deathCookie = cookie.serialize("LoginToken", "", {
+    httpOnly: true,
+    expires: new Date(0),
+    sameSite: "none",
+    secure: true,
+    path: "/",
+  });
+
+  res.setHeader("Set-Cookie", deathCookie);
+
+  res.status(200).json({
+    message: "Cookie has been cleared",
+  });
+};
+
 const router = express.Router();
 
 router.get("/", authorizeMiddleware, getAuthUserHandler);
 router.post("/register", registerHandler);
 router.post("/login", loginHandler);
+router.get("/logout", logoutHandler);
 
 module.exports = router;
